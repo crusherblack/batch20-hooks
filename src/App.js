@@ -1,68 +1,34 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext } from "react";
+
+import Navbar from "./components/Navbar";
+import PrivateRoute from "./components/PrivateRoute";
+
+import Login from "./pages/Login";
+import Home from "./pages/Home";
+import Cart from "./pages/Cart";
+
+import { AppContext } from "./context/globalContext";
+
+import "bootstrap/dist/css/bootstrap.min.css";
+
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 const App = () => {
-  const [counter, setCounter] = useState(0);
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  console.log("eksekusi 1");
-
-  useEffect(() => {
-    //tulis code
-    //dieksekusi setelah render
-    //dijalankan pertama sekali, kemudian jika ada perubahan value pada dependencies maka effect dijalankan kembali
-    //componentDidMount & componentDidUpdate spesifik
-
-    console.log("eksekusi 2 dari effect");
-  }, [counter]);
-
-  useEffect(() => {
-    //dijalankan setiap kali ada render pada aplikasi
-    //componentDidMount & componentDidUpdate all
-  });
-
-  useEffect(() => {
-    //dijalankan hanya sekali meski ada rerender pada aplikasi
-    //componentDidMount
-  }, []);
-
-  useEffect(() => {
-    //coding kita
-    //timer
-
-    return () => {
-      //cleanup function
-      //jika component diunrender
-      //componentDidUnmount
-    };
-  }, []);
-
-  const fetchPosts = () => {
-    fetch("https://jsonplaceholder.typicode.com/posts")
-      .then((response) => response.json())
-      .then((json) => setPosts(json));
-  };
-
-  useEffect(() => {
-    setLoading(true);
-    fetchPosts();
-    setLoading(false);
-  }, []);
-
-  console.log("posts state", posts);
-
-  console.log("eksekusi 3");
+  const [state] = useContext(AppContext);
 
   return (
-    <div>
-      <h1>Counter : {counter}</h1>
-      <button onClick={() => setCounter(counter + 1)}>TAMBAH</button>
-      <h1>List posts</h1>
-      {loading ? (
-        <h2>Loading...</h2>
-      ) : (
-        posts.map((post) => <h3 key={post.id}>{post.title}</h3>)
-      )}
-    </div>
+    <Router>
+      <div>
+        {state.isLogin && <Navbar />}
+        <Switch>
+          <Route path="/" exact>
+            <Login />
+          </Route>
+          <PrivateRoute path="/home" exact component={Home} />
+          <PrivateRoute path="/cart" exact component={Cart} />
+        </Switch>
+      </div>
+    </Router>
   );
 };
 
