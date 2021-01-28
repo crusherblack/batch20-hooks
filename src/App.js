@@ -6,6 +6,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Cart from "./pages/Cart";
+import Detail from "./pages/Detail";
 
 import { AppContext } from "./context/globalContext";
 
@@ -24,6 +25,7 @@ const App = () => {
           <Route path="/" exact>
             <Login />
           </Route>
+          <PrivateRoute path="/product/:id" exact component={Detail} />
           <PrivateRoute path="/home" exact component={Home} />
           <PrivateRoute path="/cart" exact component={Cart} />
         </Switch>
